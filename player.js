@@ -36,21 +36,3 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   this.moving = true
   return direction
 }
-
-Player.prototype.undoFollowCursor = function (direction) {
-  switch (direction) {
-  case 0:
-    this.undoMoveDown()
-    break
-  case 1:
-    this.undoMoveUp()
-    break
-  case 2:
-    this.undoMoveRight()
-    break
-  case 3:
-    this.undoMoveLeft()
-    break
-  }
-  this.moving = false
-}

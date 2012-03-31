@@ -65,6 +65,24 @@ Character.prototype = {
     }
   },
 
+  undoMove : function (direction) {
+    switch (direction) {
+    case 0:
+      this.undoMoveDown()
+      break
+    case 1:
+      this.undoMoveLeft()
+      break
+    case 2:
+      this.undoMoveRight()
+      break
+    case 3:
+      this.undoMoveUp()
+      break
+    }
+    this.moving = false
+  },
+
   moveDown : function () {
     var y = this.y + this.speed
     if (y < this.canvasHeight)

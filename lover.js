@@ -74,11 +74,11 @@
     if (cursorOnScreen) {
       var direction = female.followCursor(cursorX, cursorY)
       if (female.colliding(male))
-        female.undoFollowCursor(direction)
+        female.undoMove(direction)
     }
   }
 
-  function updateEnemyPositions () {
+  function updateEnemyPositions() {
     enemies.forEach(function (enemy) {
       enemy.move(canvas.width, canvas.height)
     })
@@ -156,21 +156,35 @@
     refresh()
   }, 50)
 
+  function randInt(leftBound, rightBound) {
+    return Math.random() * (rightBound - leftBound) + leftBound
+  }
+
   function spawnEnemy() {
-    var spawnPosition = {
-      x : Math.random() * Enemy.SPAWN_AREA_LENGTH * 2,
-      y : Math.random() * Enemy.SPAWN_AREA_LENGTH * 2
+    var spawnPosition = {}, entryEdge = Math.round(Math.random() * 4)
+
+    switch (entryEdge) {
+    case 0:
+      spawnPosition.x = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
+      spawnPosition.y = randInt(-Enemy.SPAWN_AREA_LENGTH, canvas.height)
+      break
+    case 1:
+      spawnPosition.x = randInt(-Enemy.SPAWN_AREA_LENGTH, canvas.width)
+      spawnPosition.y = randInt(canvas.height,
+                                canvas.height + Enemy.SPAWN_AREA_LENGTH)
+      break
+    case 2:
+      spawnPosition.x = randInt(canvas.width,
+                                canvas.width + Enemy.SPAWN_AREA_LENGTH)
+      spawnPosition.y = randInt(Enemy.SPAWN_AREA_LENGTH,
+                                canvas.height + Enemy.SPAWN_AREA_LENGTH)
+      break
+    case 3:
+      spawnPosition.x = randInt(Enemy.SPAWN_AREA_LENGTH,
+                                canvas.width + Enemy.SPAWN_AREA_LENGTH)
+      spawnPosition.y = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
+      break
     }
-
-    if (spawnPosition.x >= Enemy.SPAWN_AREA_LENGTH)
-      spawnPosition.x = spawnPosition - Enemy.SPAWN_AREA_LENGTH + canvas.width
-    else
-      spawnPosition.x = -spawnPosition.x
-
-    if (spawnPosition.y >= Enemy.SPAWN_AREA_LENGTH)
-      spawnPosition.y = spawnPosition - Enemy.SPAWN_AREA_LENGTH + canvas.height
-    else
-      spawnPosition.y = -spawnPosition.y
 
     enemies.push(new Enemy(spawnPosition.x, spawnPosition.y, 20,
                            canvas.width, canvas.height,  "undead.png"))

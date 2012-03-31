@@ -17,9 +17,8 @@ Enemy.prototype.move = function (width, height) {
   else if (this.x >= width)
     this.moveLeft()
   else if (this.y >= height)
-    this.movUp()
+    this.moveUp()
   else {
-
     if ((--this.retainDirectionCount) > 0)
       this.moveToward(this.orientation)
     else {
