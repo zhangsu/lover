@@ -21,6 +21,13 @@ function randInt(leftBound, rightBound) {
   female = new Player(randInt(canvas.width / 2, canvas.width),
                       randInt(0, canvas.height),
                       16, canvas.width, canvas.height, "female.png")
+  male.breath = male.maxBreath = 1200
+  male.breathRegenRate = 2
+  male.breathLoseRate = 5
+
+  female.breath = female.maxBreath = 1000
+  female.breathRegenRate = 4
+  female.breathLoseRate = 7
 
   refresh()
 
@@ -71,6 +78,7 @@ function randInt(leftBound, rightBound) {
     }
     
     if (male.colliding(female)) {
+      male.besideLover = true
       if (leftKeyDown)
         male.undoMoveLeft()
       else if (rightKeyDown)
@@ -80,6 +88,8 @@ function randInt(leftBound, rightBound) {
       else if (downKeyDown)
         male.undoMoveDown()
       male.moving = false
+    } else {
+      male.besideLover = false
     }
   }
 
@@ -95,6 +105,11 @@ function randInt(leftBound, rightBound) {
     enemies.forEach(function (enemy) {
       enemy.move(canvas.width, canvas.height)
     })
+  }
+
+  function updateBreaths() {
+    male.updateBreath()
+    female.updateBreath()
   }
 
   window.addEventListener('keydown', function (e) {
@@ -167,6 +182,7 @@ function randInt(leftBound, rightBound) {
     updateFemalePosition()
     updateEnemyPositions()
     checkEnemyCollisions()
+    updateBreaths()
     refresh()
   }, 50)
   

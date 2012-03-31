@@ -2,12 +2,29 @@ Player.RETAIN_CURSOR_DIRECTION_COUNT = 3
 
 function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   Character.call(this, x, y, unitWidth, canvasWidth, canvasHeight, imagePath)
-  this.speed = 3
-  this.hp = 10
+  this.pace = 3
   this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
+  this.besideLover = false
+  this.breath = 1000
+  this.maxBreath = 1000
+  this.breathRegenRate = 2
+  this.breathLoseRate = 5
 }
 
 Player.prototype = Object.create(new Character())
+
+Player.prototype.updateBreath = function () {
+  if (this.besideLover && this.breath < this.maxBreath) {
+      this.breath += this.breathRegenRate
+      this.breath %= this.maxBreath
+  } else if (this.breath > 0) {
+    this.breath -= this.breathLoseRate
+    if (this.breath <= 0) {
+      this.die()
+      this.breath = 0
+    }
+  }
+}
 
 Player.prototype.cursorDirection = function (deltaX, deltaY, cursorX, cursorY) {
   if ((--this.retainCursorDirectionCount) > 0)
@@ -15,10 +32,8 @@ Player.prototype.cursorDirection = function (deltaX, deltaY, cursorX, cursorY) {
   else
     this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
 
-  // Down or up
   if (deltaX < deltaY)
     return this.y < cursorY ? 0 : 3
-  // Right or left
   else
     return this.x < cursorX ? 2 : 1
 }
@@ -37,18 +52,19 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   return direction
 }
 
-Player.prototype.die = function (context) {
-  this.alive = false
-}
-
 Player.prototype.draw = function(context) {
   if (!this.alive) {
-    if (this.scale < 0.05)
+    if (this.scale < 0.01)
       return
     this.scale -= 0.01
-    if (this.opacity >= 0.05)
-      this.opacity -= 0.05
+    this.opacity -= 0.05
+    if (this.opacity < 0)
+    this.opacity = 0
     this.y += 1
   }
   Character.prototype.draw.call(this, context)
+}
+
+Player.prototype.die = function (context) {
+  this.alive = false
 }
