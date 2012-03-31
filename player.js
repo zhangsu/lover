@@ -1,5 +1,5 @@
-function Player(x, y, width, height, image_path) {
-  Character.call(this, x, y, width, height, image_path)
+function Player(x, y, width, height, imagePath) {
+  Character.call(this, x, y, width, height, imagePath)
   this.hp = 10
 }
 

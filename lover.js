@@ -1,11 +1,11 @@
 ;(function () {
-  var canvas = document.getElementById("viewport"),
-      context = canvas.getContext("2d")
+  var canvas = document.getElementById('viewport'),
+      context = canvas.getContext('2d'),
+      male = new Player(88, 99, 128 / 4, 192 / 4, "male.png"),
+      female = new Player(188, 199, 128 / 4, 192 / 4, "female.png")
 
-  context.fillText("Lover", 0, 0)
-
-  var male = new Player(88, 99),
-      female = new Player(188, 199)
+  context.fillStyle = "rgb(90, 90, 255)"
+  context.fillRect(0, 0, canvas.width, canvas.height)
 
   function clear() {
     male.clear(context)
@@ -99,6 +99,6 @@
     updateMalePosition()
     updateFemalePosition()
     refresh()
-  }, 50)
+  }, 75)
 
 })()
