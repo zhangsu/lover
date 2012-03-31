@@ -42,8 +42,13 @@ Player.prototype.die = function (context) {
 }
 
 Player.prototype.draw = function(context) {
-  if (this.alive)
-    Character.prototype.draw.call(this, context)
-  else {
+  if (!this.alive) {
+    if (this.scale < 0.05)
+      return
+    this.scale -= 0.01
+    if (this.opacity >= 0.05)
+      this.opacity -= 0.05
+    this.y += 1
   }
+  Character.prototype.draw.call(this, context)
 }

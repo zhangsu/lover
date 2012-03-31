@@ -56,6 +56,8 @@ function randInt(leftBound, rightBound) {
   }
 
   function updateMalePosition() {
+    if (!male.alive)
+      return
     male.moving = true
     if (leftKeyDown)
       male.moveLeft()
@@ -84,11 +86,11 @@ function randInt(leftBound, rightBound) {
   }
 
   function updateFemalePosition() {
-    if (cursorOnScreen) {
-      var direction = female.followCursor(cursorX, cursorY)
-      if (female.colliding(male))
-        female.undoMove(direction)
-    }
+    if (!female.alive || !cursorOnScreen)
+      return
+    var direction = female.followCursor(cursorX, cursorY)
+    if (female.colliding(male))
+      female.undoMove(direction)
   }
 
   function updateEnemyPositions() {

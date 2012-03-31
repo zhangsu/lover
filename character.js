@@ -10,6 +10,8 @@ function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.spriteFrame = 0
   this.orientation = 0
   this.alive = true
+  this.scale = 1.0
+  this.opacity = 1.0
   if (imagePath) {
     this.image = new Image()
     var self = this
@@ -132,12 +134,15 @@ Character.prototype = {
   },
 
   draw : function (context) {
+    var width = Math.round(this.spriteWidth * this.scale)
+    var height = Math.round(this.spriteHeight * this.scale)
     context.save()
-    context.translate(this.x - this.spriteWidth / 2, this.y - this.spriteHeight / 2)
+    context.globalAlpha = this.opacity
+    context.translate(this.x - width / 2, this.y - height / 2)
     context.drawImage(this.image, this.spriteFrame * this.spriteWidth,
                       this.orientation * this.spriteHeight,
                       this.spriteWidth, this.spriteHeight, 0, 0,
-                      this.spriteWidth, this.spriteHeight)
+                      width, height)
     context.restore()
   },
 
