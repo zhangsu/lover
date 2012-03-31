@@ -1,8 +1,9 @@
 ;(function () {
   var canvas = document.getElementById('viewport'),
       context = canvas.getContext('2d'),
-      male = new Player(88, 99, 128 / 4, 192 / 4, "male.png"),
-      female = new Player(188, 199, 128 / 4, 192 / 4, "female.png")
+      male = new Player(88, 99, 16, 128 / 4, 192 / 4, "male.png"),
+      female = new Player(188, 199, 16, 128 / 4, 192 / 4, "female.png"),
+      enemies = []
 
   context.fillStyle = "rgb(90, 90, 255)"
   context.fillRect(0, 0, canvas.width, canvas.height)
@@ -13,8 +14,15 @@
   }
 
   function refresh() {
-    male.draw(context)
-    female.draw(context)
+    var sprites = enemies.slice(0)
+    sprites.push(male)
+    sprites.push(female)
+    sprites.sort(function (a, b) {
+      return a.y - b.y
+    })
+    sprites.forEach(function (sprite) {
+      sprite.draw(context)
+    })
   }
 
   refresh()
@@ -25,7 +33,13 @@
       upKeyDown = false,
       cursorX, cursorY, cursorOnScreen
 
+  function overflow(character) {
+    return character.x < 0 || character.y < 0 ||
+           character.x >= canvas.width || character.y >= canvas.height
+  }
+
   function updateMalePosition() {
+    male.moving = true
     if (leftKeyDown)
       male.moveLeft()
     else if (rightKeyDown)
@@ -34,11 +48,30 @@
       male.moveUp()
     else if (downKeyDown)
       male.moveDown()
+    else {
+      male.moving = false
+      return
+    }
+
+    if (overflow(male) || male.colliding(female)) {
+      if (leftKeyDown)
+        male.undoMoveLeft()
+      else if (rightKeyDown)
+        male.undoMoveRight()
+      else if (upKeyDown)
+        male.undoMoveUp()
+      else if (downKeyDown)
+        male.undoMoveDown()
+      male.moving = false
+    }
   }
 
   function updateFemalePosition() {
-    if (cursorOnScreen)
-      female.followCursor(cursorX, cursorY)
+    if (cursorOnScreen) {
+      var direction = female.followCursor(cursorX, cursorY)
+      if (overflow(female) || female.colliding(male))
+        female.undoFollowCursor(direction)
+    }
   }
 
   window.addEventListener('keydown', function (e) {
@@ -94,11 +127,20 @@
     }
   }, true)
 
+  window.addEventListener("blur", function (e) {
+    leftKeyDown = false
+    upKeyDown = false
+    rightKeyDown = false
+    downKeyDown = false
+    cursorOnScreen = false
+    female.moving = false
+  }, true)
+
   window.setInterval(function () {
     clear()
     updateMalePosition()
     updateFemalePosition()
     refresh()
-  }, 75)
+  }, 50)
 
 })()
