@@ -1,3 +1,6 @@
+Enemy.RETAIN_DIRECTION_COUNT = 10
+Enemy.SPAWN_AREA_LENGTH = 50
+
 function Enemy(unitWidth, canvasWidth, canvasHeight, imagePath) {
   Character.call(this, 0, 0, unitWidth, canvasWidth, canvasHeight, imagePath)
 
@@ -25,9 +28,6 @@ function Enemy(unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.speed = 5
   this.retainDirectionCount = Enemy.RETAIN_DIRECTION_COUNT
 }
-
-Enemy.RETAIN_DIRECTION_COUNT = 10
-Enemy.SPAWN_AREA_LENGTH = 50
 
 Enemy.prototype = Object.create(new Character())
 

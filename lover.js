@@ -27,7 +27,7 @@ function randInt(leftBound, rightBound) {
   refresh()
 
   function clear() {
-    enemies.slice(0).forEach(function (sprite) {
+    enemies.forEach(function (sprite) {
       sprite.clear(context)
     })
     male.clear(context)

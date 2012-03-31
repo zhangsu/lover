@@ -1,3 +1,5 @@
+Character.FRAME_COUNT = 4
+
 function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.speed = 5
   this.x = x || 0
@@ -29,21 +31,7 @@ function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   }, this.speed * 50)
 }
 
-Character.FRAME_COUNT = 4
-
 Character.prototype = {
-  sprite : function () {
-    var buffer = document.createElement("canvas")
-    buffer.setAttribute('width', this.spriteWidth)
-    buffer.setAttribute('height', this.spriteHeight)
-    var context = buffer.getContext("2d")
-    context.drawImage(this.image, this.spriteFrame * this.spriteWidth,
-                      this.orientation * this.spriteHeight,
-                      this.spriteWidth, this.spriteHeight, 0, 0,
-                      this.spriteWidth, this.spriteHeight)
-    return buffer
-  },
-
   overflow : function () {
     return this.x < 0 || this.y < 0 ||
            this.x >= canvas.width || this.y >= canvas.height
@@ -145,8 +133,11 @@ Character.prototype = {
 
   draw : function (context) {
     context.save()
-    context.translate(-this.spriteWidth / 2, -this.spriteHeight / 2)
-    context.drawImage(this.sprite(), this.x, this.y)
+    context.translate(this.x - this.spriteWidth / 2, this.y - this.spriteHeight / 2)
+    context.drawImage(this.image, this.spriteFrame * this.spriteWidth,
+                      this.orientation * this.spriteHeight,
+                      this.spriteWidth, this.spriteHeight, 0, 0,
+                      this.spriteWidth, this.spriteHeight)
     context.restore()
   },
 

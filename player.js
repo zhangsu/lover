@@ -1,11 +1,11 @@
+Player.RETAIN_CURSOR_DIRECTION_COUNT = 3
+
 function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   Character.call(this, x, y, unitWidth, canvasWidth, canvasHeight, imagePath)
   this.speed = 3
   this.hp = 10
   this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
 }
-
-Player.RETAIN_CURSOR_DIRECTION_COUNT = 3
 
 Player.prototype = Object.create(new Character())
 
@@ -39,14 +39,6 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
 
 Player.prototype.die = function (context) {
   this.alive = false
-}
-
-Player.prototype.sprite = function () {
-  if (this.alive)
-    return Character.prototype.sprite.call(this)
-  else {
-    
-  }
 }
 
 Player.prototype.draw = function(context) {
