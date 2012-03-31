@@ -32,6 +32,10 @@ Character.prototype = {
   },
 
   move: function (cursorX, cursorY) {
+    if (Math.abs(cursorX - this.x) <= 1 &&
+        Math.abs(cursorY - this.y) <= 1)
+      return
+
     switch (this.direction(cursorX, cursorY)) {
     case 0:
       this.moveDown()
@@ -65,10 +69,16 @@ Character.prototype = {
   },
 
   draw: function (context) {
+    context.save()
+    context.translate(-this.width / 2, -this.height / 2)
     context.drawImage(this.sprite(), this.x, this.y)
+    context.restore()
   },
 
   clear: function (context) {
+    context.save()
+    context.translate(-this.width / 2, -this.height / 2)
     context.clearRect(this.x, this.y, this.width, this.height)
+    context.restore()
   }
 }
