@@ -4,8 +4,8 @@
 
   context.fillText("Lover", 0, 0)
 
-  var male = new Character(88, 99),
-      female = new Character(188, 199)
+  var male = new Player(88, 99),
+      female = new Player(188, 199)
 
   function clear() {
     male.clear(context)
@@ -38,7 +38,7 @@
 
   function updateFemalePosition() {
     if (cursorOnScreen)
-      female.move(cursorX, cursorY)
+      female.followCursor(cursorX, cursorY)
   }
 
   window.addEventListener('keydown', function (e) {

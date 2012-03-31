@@ -20,38 +20,6 @@ Character.prototype = {
     return buffer
   },
 
-  direction: function (cursorX, cursorY) {
-    var deltaY = Math.abs(cursorY - this.y),
-        deltaX = Math.abs(cursorX - this.x)
-    if (deltaX < deltaY)
-      // Down or up
-      return this.y < cursorY ? 0 : 1
-    else
-      // Right or left
-      return this.x < cursorX ? 2 : 3
-  },
-
-  move: function (cursorX, cursorY) {
-    if (Math.abs(cursorX - this.x) <= 1 &&
-        Math.abs(cursorY - this.y) <= 1)
-      return
-
-    switch (this.direction(cursorX, cursorY)) {
-    case 0:
-      this.moveDown()
-      break
-    case 1:
-      this.moveUp()
-      break
-    case 2:
-      this.moveRight()
-      break
-    case 3:
-      this.moveLeft()
-      break
-    }
-  },
-
   moveDown: function (context) {
     this.y += this.SPEED
   },
