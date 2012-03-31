@@ -1,5 +1,5 @@
-function Player(x, y, unitWidth, spriteWidth, spriteHeight, imagePath) {
-  Character.call(this, x, y, unitWidth, spriteWidth, spriteHeight, imagePath)
+function Player(x, y, unitWidth, imagePath) {
+  Character.call(this, x, y, unitWidth, imagePath)
   this.speed = 3
   this.hp = 10
   this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT

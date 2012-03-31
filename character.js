@@ -1,14 +1,17 @@
-function Character(x, y, unitWidth, spriteWidth, spriteHeight, imagePath) {
+function Character(x, y, unitWidth, imagePath) {
   this.speed = 5
   this.x = x || 0
   this.y = y || 0
   this.unitWidth = unitWidth || 20
-  this.spriteWidth = spriteWidth || 32
-  this.spriteHeight = spriteHeight || 32
   this.spriteFrame = 0
   this.orientation = 0
   if (imagePath) {
     this.image = new Image()
+    var self = this
+    this.image.onload = function () {
+      self.spriteWidth = this.width / 4
+      self.spriteHeight = this.height / 4
+    }
     this.image.src = imagePath
   }
 
@@ -26,7 +29,7 @@ function Character(x, y, unitWidth, spriteWidth, spriteHeight, imagePath) {
 Character.FRAME_COUNT = 4
 
 Character.prototype = {
-  sprite: function () {
+  sprite : function () {
     var buffer = document.createElement("canvas")
     buffer.setAttribute('width', this.spriteWidth)
     buffer.setAttribute('height', this.spriteHeight)
@@ -38,42 +41,42 @@ Character.prototype = {
     return buffer
   },
 
-  moveDown: function () {
+  moveDown : function () {
     this.y += this.speed
     this.orientation = 0
   },
 
-  moveUp: function () {
+  moveUp : function () {
     this.y -= this.speed
     this.orientation = 3
   },
 
-  moveLeft: function () {
+  moveLeft : function () {
     this.x -= this.speed
     this.orientation = 1
   },
 
-  moveRight: function () {
+  moveRight : function () {
     this.x += this.speed
     this.orientation = 2
   },
-  undoMoveDown: function () {
+  undoMoveDown : function () {
     this.y -= this.speed
   },
 
-  undoMoveUp: function () {
+  undoMoveUp : function () {
     this.y += this.speed
   },
 
-  undoMoveLeft: function () {
+  undoMoveLeft : function () {
     this.x += this.speed
   },
 
-  undoMoveRight: function () {
+  undoMoveRight : function () {
     this.x -= this.speed
   },
 
-  colliding: function (character) {
+  colliding : function (character) {
     var thisOffset = this.unitWidth / 2,
         thisX1 = this.x - thisOffset,
         thisY1 = this.y - thisOffset,
@@ -87,14 +90,14 @@ Character.prototype = {
     return thisX1 <= x2 && thisX2 >= x1 && thisY1 <= y2 && thisY2 >= y1
   },
 
-  draw: function (context) {
+  draw : function (context) {
     context.save()
     context.translate(-this.spriteWidth / 2, -this.spriteHeight / 2)
     context.drawImage(this.sprite(), this.x, this.y)
     context.restore()
   },
 
-  clear: function (context) {
+  clear : function (context) {
     context.save()
     context.translate(-this.spriteWidth / 2, -this.spriteHeight / 2)
     context.fillRect(this.x, this.y, this.spriteWidth, this.spriteHeight)

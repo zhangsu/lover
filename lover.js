@@ -1,12 +1,26 @@
 ;(function () {
   var canvas = document.getElementById('viewport'),
       context = canvas.getContext('2d'),
-      male = new Player(88, 99, 16, 128 / 4, 192 / 4, "male.png"),
-      female = new Player(188, 199, 16, 128 / 4, 192 / 4, "female.png"),
-      enemies = []
+      male, female, enemies = [],
+      leftKeyDown = false,
+      rightKeyDown = false,
+      downKeyDown = false,
+      upKeyDown = false,
+      cursorX, cursorY, cursorOnScreen,
+      sampleSpaceX, sampleSpaceY
 
   context.fillStyle = "rgb(90, 90, 255)"
   context.fillRect(0, 0, canvas.width, canvas.height)
+
+  male = new Player(Math.round(Math.random() * canvas.width / 2),
+                    Math.round(Math.random() * canvas.height),
+                    16, "male.png")
+  female = new Player(Math.round(Math.random() * canvas.width / 2)
+                      + canvas.width / 2,
+                      Math.round(Math.random() * canvas.height),
+                      16, "female.png")
+
+  refresh()
 
   function clear() {
     male.clear(context)
@@ -24,14 +38,6 @@
       sprite.draw(context)
     })
   }
-
-  refresh()
-
-  var leftKeyDown = false,
-      rightKeyDown = false,
-      downKeyDown = false,
-      upKeyDown = false,
-      cursorX, cursorY, cursorOnScreen
 
   function overflow(character) {
     return character.x < 0 || character.y < 0 ||
@@ -72,6 +78,12 @@
       if (overflow(female) || female.colliding(male))
         female.undoFollowCursor(direction)
     }
+  }
+
+  function updateEnemyPositions () {
+    enemies.forEach(function (enemy) {
+      enemy.move(canvas.width, canvas.height)
+    })
   }
 
   window.addEventListener('keydown', function (e) {
@@ -124,6 +136,7 @@
       e.preventDefault()
     } else {
       cursorOnScreen = false
+      female.moving = false
     }
   }, true)
 
@@ -136,11 +149,35 @@
     female.moving = false
   }, true)
 
+  // Main rendering loop.
   window.setInterval(function () {
     clear()
     updateMalePosition()
     updateFemalePosition()
+    updateEnemyPositions()
     refresh()
   }, 50)
+
+  function spawnEnemy() {
+    var spawnPosition = {
+      x : Math.random() * Enemy.SPAWN_AREA_LENGTH * 2,
+      y : Math.random() * Enemy.SPAWN_AREA_LENGTH * 2
+    }
+
+    if (spawnPosition.x >= Enemy.SPAWN_AREA_LENGTH)
+      spawnPosition.x = spawnPosition - Enemy.SPAWN_AREA_LENGTH + canvas.width
+    else
+      spawnPosition.x = -spawnPosition.x
+
+    if (spawnPosition.y >= Enemy.SPAWN_AREA_LENGTH)
+      spawnPosition.y = spawnPosition - Enemy.SPAWN_AREA_LENGTH + canvas.height
+    else
+      spawnPosition.y = -spawnPosition.y
+
+    enemies.push(new Enemy(spawnPosition.x, spawnPosition.y, 20, "undead.png"))
+  }
+  // Spawn enemies.
+  spawnEnemy()
+  window.setInterval(spawnEnemy, 5000)
 
 })()
