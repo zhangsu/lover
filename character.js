@@ -7,6 +7,7 @@ function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.canvasHeight = canvasHeight || 600
   this.spriteFrame = 0
   this.orientation = 0
+  this.alive = true
   if (imagePath) {
     this.image = new Image()
     var self = this
@@ -127,6 +128,8 @@ Character.prototype = {
   },
 
   colliding : function (character) {
+    if (!character.alive)
+      return
     var thisOffset = this.unitWidth / 2,
         thisX1 = this.x - thisOffset,
         thisY1 = this.y - thisOffset,

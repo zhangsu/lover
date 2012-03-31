@@ -36,3 +36,22 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   this.moving = true
   return direction
 }
+
+Player.prototype.die = function (context) {
+  this.alive = false
+}
+
+Player.prototype.sprite = function () {
+  if (this.alive)
+    return Character.prototype.sprite.call(this)
+  else {
+    
+  }
+}
+
+Player.prototype.draw = function(context) {
+  if (this.alive)
+    Character.prototype.draw.call(this, context)
+  else {
+  }
+}

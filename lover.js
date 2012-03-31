@@ -1,3 +1,7 @@
+function randInt(leftBound, rightBound) {
+  return Math.random() * (rightBound - leftBound) + leftBound
+}
+
 ;(function () {
   var canvas = document.getElementById('viewport'),
       context = canvas.getContext('2d'),
@@ -39,6 +43,15 @@
     })
     sprites.forEach(function (sprite) {
       sprite.draw(context)
+    })
+  }
+
+  function checkEnemyCollisions() {
+    enemies.forEach(function (enemy) {
+      if (male.colliding(enemy))
+        male.die()
+      if (female.colliding(enemy))
+        female.die()
     })
   }
 
@@ -147,50 +160,22 @@
     female.moving = false
   }, true)
 
-  // Main rendering loop.
+  // Main logic layer loop.
   window.setInterval(function () {
     clear()
     updateMalePosition()
     updateFemalePosition()
     updateEnemyPositions()
+    checkEnemyCollisions()
     refresh()
   }, 50)
-
-  function randInt(leftBound, rightBound) {
-    return Math.random() * (rightBound - leftBound) + leftBound
-  }
-
+  
   function spawnEnemy() {
-    var spawnPosition = {}, entryEdge = Math.round(Math.random() * 4)
-
-    switch (entryEdge) {
-    case 0:
-      spawnPosition.x = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
-      spawnPosition.y = randInt(-Enemy.SPAWN_AREA_LENGTH, canvas.height)
-      break
-    case 1:
-      spawnPosition.x = randInt(-Enemy.SPAWN_AREA_LENGTH, canvas.width)
-      spawnPosition.y = randInt(canvas.height,
-                                canvas.height + Enemy.SPAWN_AREA_LENGTH)
-      break
-    case 2:
-      spawnPosition.x = randInt(canvas.width,
-                                canvas.width + Enemy.SPAWN_AREA_LENGTH)
-      spawnPosition.y = randInt(Enemy.SPAWN_AREA_LENGTH,
-                                canvas.height + Enemy.SPAWN_AREA_LENGTH)
-      break
-    case 3:
-      spawnPosition.x = randInt(Enemy.SPAWN_AREA_LENGTH,
-                                canvas.width + Enemy.SPAWN_AREA_LENGTH)
-      spawnPosition.y = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
-      break
-    }
-
-    enemies.push(new Enemy(spawnPosition.x, spawnPosition.y, 20,
-                           canvas.width, canvas.height,  "undead.png"))
+    enemies.push(new Enemy(20, canvas.width, canvas.height, "undead.png"))
   }
 
   // Spawn enemies.
-  spawnEnemy()
+  for (var i = 0; i < 20; ++i)
+    spawnEnemy()
   window.setInterval(spawnEnemy, 5000)
 })()
