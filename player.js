@@ -26,7 +26,7 @@ Player.prototype.cursorDirection = function (deltaX, deltaY, cursorX, cursorY) {
 Player.prototype.followCursor = function (cursorX, cursorY) {
   var deltaX = Math.abs(cursorX - this.x),
       deltaY = Math.abs(cursorY - this.y)
-  if (deltaX <= this.speed && deltaY <= this.speed) {
+  if (deltaX <= this.pace && deltaY <= this.pace) {
     this.moving = false
     return
   }

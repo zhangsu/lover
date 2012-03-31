@@ -25,7 +25,7 @@ function Enemy(unitWidth, canvasWidth, canvasHeight, imagePath) {
     this.y = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
     break
   }
-  this.speed = 5
+  this.pace = 5
   this.retainDirectionCount = Enemy.RETAIN_DIRECTION_COUNT
 }
 

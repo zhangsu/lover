@@ -1,7 +1,7 @@
 Character.FRAME_COUNT = 4
 
 function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
-  this.speed = 5
+  this.pace = 5
   this.x = x || 0
   this.y = y || 0
   this.unitWidth = unitWidth || 20
@@ -9,7 +9,6 @@ function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.canvasHeight = canvasHeight || 600
   this.spriteFrame = 0
   this.orientation = 0
-  this.alive = true
   this.scale = 1.0
   this.opacity = 1.0
   if (imagePath) {
@@ -30,7 +29,9 @@ function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
     } else {
       self.spriteFrame = 0
     }
-  }, this.speed * 50)
+  }, this.pace * 50)
+
+  this.alive = true
 }
 
 Character.prototype = {
@@ -75,46 +76,46 @@ Character.prototype = {
   },
 
   moveDown : function () {
-    var y = this.y + this.speed
+    var y = this.y + this.pace
     if (y < this.canvasHeight)
       this.y = y
     this.orientation = 0
   },
 
   moveUp : function () {
-    var y = this.y - this.speed
+    var y = this.y - this.pace
     if (y >= 0)
       this.y = y
     this.orientation = 3
   },
 
   moveLeft : function () {
-    var x = this.x - this.speed
+    var x = this.x - this.pace
     if (x >= 0)
       this.x = x
     this.orientation = 1
   },
 
   moveRight : function () {
-    var x = this.x + this.speed
+    var x = this.x + this.pace
     if (x < this.canvasWidth)
       this.x = x
     this.orientation = 2
   },
   undoMoveDown : function () {
-    this.y -= this.speed
+    this.y -= this.pace
   },
 
   undoMoveUp : function () {
-    this.y += this.speed
+    this.y += this.pace
   },
 
   undoMoveLeft : function () {
-    this.x += this.speed
+    this.x += this.pace
   },
 
   undoMoveRight : function () {
-    this.x -= this.speed
+    this.x -= this.pace
   },
 
   colliding : function (character) {
