@@ -1,5 +1,5 @@
 function randInt(leftBound, rightBound) {
-  return Math.random() * (rightBound - leftBound) + leftBound
+  return Math.floor(Math.random() * (rightBound - leftBound)) + leftBound
 }
 
 ;(function () {
@@ -16,12 +16,10 @@ function randInt(leftBound, rightBound) {
   context.fillStyle = "rgb(90, 90, 255)"
   context.fillRect(0, 0, canvas.width, canvas.height)
 
-  male = new Player(Math.round(Math.random() * canvas.width / 2),
-                    Math.round(Math.random() * canvas.height),
+  male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
                     16, canvas.width, canvas.height, "male.png")
-  female = new Player(Math.round(Math.random() * canvas.width / 2)
-                      + canvas.width / 2,
-                      Math.round(Math.random() * canvas.height),
+  female = new Player(randInt(canvas.width / 2, canvas.width),
+                      randInt(0, canvas.height),
                       16, canvas.width, canvas.height, "female.png")
 
   refresh()

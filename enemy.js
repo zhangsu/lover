@@ -1,10 +1,9 @@
 Enemy.RETAIN_DIRECTION_COUNT = 10
-Enemy.SPAWN_AREA_LENGTH = 50
+Enemy.SPAWN_AREA_LENGTH = 100
 
 function Enemy(unitWidth, canvasWidth, canvasHeight, imagePath) {
   Character.call(this, 0, 0, unitWidth, canvasWidth, canvasHeight, imagePath)
-
-  var spawnPosition = {}, entryEdge = Math.round(Math.random() * 4)
+  var spawnPosition = {}, entryEdge = randInt(0, 4)
   switch (entryEdge) {
   case 0:
     this.x = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
@@ -45,7 +44,7 @@ Enemy.prototype.move = function (width, height) {
       this.moveToward(this.orientation)
     else {
       this.retainDirectionCount = Enemy.RETAIN_DIRECTION_COUNT
-      this.moveToward(Math.round(Math.random() * 4))
+      this.moveToward(randInt(0, 4))
     }
   }
 }
