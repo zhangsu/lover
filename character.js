@@ -1,8 +1,10 @@
-function Character(x, y, unitWidth, imagePath) {
+function Character(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.speed = 5
   this.x = x || 0
   this.y = y || 0
   this.unitWidth = unitWidth || 20
+  this.canvasWidth = canvasWidth || 800
+  this.canvasHeight = canvasHeight || 600
   this.spriteFrame = 0
   this.orientation = 0
   if (imagePath) {
@@ -41,23 +43,53 @@ Character.prototype = {
     return buffer
   },
 
+  overflow : function () {
+    return this.x < 0 || this.y < 0 ||
+           this.x >= canvas.width || this.y >= canvas.height
+  },
+
+  moveToward : function (direction) {
+    switch (direction) {
+    case 0:
+      this.moveDown()
+      break
+    case 1:
+      this.moveLeft()
+      break
+    case 2:
+      this.moveRight()
+      break
+    case 3:
+      this.moveUp()
+      break
+    }
+  },
+
   moveDown : function () {
-    this.y += this.speed
+    var y = this.y + this.speed
+    if (y < this.canvasHeight)
+      this.y = y
     this.orientation = 0
   },
 
   moveUp : function () {
-    this.y -= this.speed
+    var y = this.y - this.speed
+    if (y >= 0)
+      this.y = y
     this.orientation = 3
   },
 
   moveLeft : function () {
-    this.x -= this.speed
+    var x = this.x - this.speed
+    if (x >= 0)
+      this.x = x
     this.orientation = 1
   },
 
   moveRight : function () {
-    this.x += this.speed
+    var x = this.x + this.speed
+    if (x < this.canvasWidth)
+      this.x = x
     this.orientation = 2
   },
   undoMoveDown : function () {

@@ -1,5 +1,5 @@
-function Player(x, y, unitWidth, imagePath) {
-  Character.call(this, x, y, unitWidth, imagePath)
+function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
+  Character.call(this, x, y, unitWidth, canvasWidth, canvasHeight, imagePath)
   this.speed = 3
   this.hp = 10
   this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
@@ -32,20 +32,7 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   }
 
   var direction = this.cursorDirection(deltaX, deltaY, cursorX, cursorY)
-  switch (direction) {
-  case 0:
-    this.moveDown()
-    break
-  case 1:
-    this.moveLeft()
-    break
-  case 2:
-    this.moveRight()
-    break
-  case 3:
-    this.moveUp()
-    break
-  }
+  this.moveToward(direction)
   this.moving = true
   return direction
 }

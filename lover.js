@@ -14,15 +14,18 @@
 
   male = new Player(Math.round(Math.random() * canvas.width / 2),
                     Math.round(Math.random() * canvas.height),
-                    16, "male.png")
+                    16, canvas.width, canvas.height, "male.png")
   female = new Player(Math.round(Math.random() * canvas.width / 2)
                       + canvas.width / 2,
                       Math.round(Math.random() * canvas.height),
-                      16, "female.png")
+                      16, canvas.width, canvas.height, "female.png")
 
   refresh()
 
   function clear() {
+    enemies.slice(0).forEach(function (sprite) {
+      sprite.clear(context)
+    })
     male.clear(context)
     female.clear(context)
   }
@@ -39,11 +42,6 @@
     })
   }
 
-  function overflow(character) {
-    return character.x < 0 || character.y < 0 ||
-           character.x >= canvas.width || character.y >= canvas.height
-  }
-
   function updateMalePosition() {
     male.moving = true
     if (leftKeyDown)
@@ -58,8 +56,8 @@
       male.moving = false
       return
     }
-
-    if (overflow(male) || male.colliding(female)) {
+    
+    if (male.colliding(female)) {
       if (leftKeyDown)
         male.undoMoveLeft()
       else if (rightKeyDown)
@@ -75,7 +73,7 @@
   function updateFemalePosition() {
     if (cursorOnScreen) {
       var direction = female.followCursor(cursorX, cursorY)
-      if (overflow(female) || female.colliding(male))
+      if (female.colliding(male))
         female.undoFollowCursor(direction)
     }
   }
@@ -174,10 +172,11 @@
     else
       spawnPosition.y = -spawnPosition.y
 
-    enemies.push(new Enemy(spawnPosition.x, spawnPosition.y, 20, "undead.png"))
+    enemies.push(new Enemy(spawnPosition.x, spawnPosition.y, 20,
+                           canvas.width, canvas.height,  "undead.png"))
   }
+
   // Spawn enemies.
   spawnEnemy()
   window.setInterval(spawnEnemy, 5000)
-
 })()
