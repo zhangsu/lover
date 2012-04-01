@@ -315,7 +315,7 @@ lover.context = lover.canvas.getContext('2d')
     if (male.besideLover || female.besideLover)
       sound.play()
     else
-      sound.stop()
+      sound.pause()
   }
 
   function updateEnemyPositions() {
