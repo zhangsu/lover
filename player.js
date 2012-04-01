@@ -52,12 +52,38 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   return direction
 }
 
+Player.prototype.drawBreathBar = function(context) {
+  var radius = Player.BREATH_BAR_WIDTH / 2
+  context.save()
+  context.translate(this.breathBarX,
+                    (this.canvasHeight - Player.BREATH_BAR_HEIGHT) / 2)
+  context.globalAlpha = 0.5
+  context.lineWidth = 3
+  context.beginPath()
+  context.strokeStyle = "rgb(30, 30, 30)"
+  context.moveTo(0, 0)
+  context.arcTo(radius, -400, Player.BREATH_BAR_WIDTH, 0, radius)
+  context.lineTo(Player.BREATH_BAR_WIDTH, Player.BREATH_BAR_HEIGHT)
+  context.arcTo(radius, Player.BREATH_BAR_HEIGHT + 400,
+                0, Player.BREATH_BAR_HEIGHT, radius)
+  context.lineTo(0, 0)
+  context.stroke()
+  context.clip()
+  var barHeight = Player.BREATH_BAR_HEIGHT + radius * 2
+  var progressHeight =
+    this.alive ? Math.round(this.breath / this.maxBreath * barHeight) : 0
+  context.fillStyle = "rgb(95, 255, 255)"
+  context.fillRect(0, barHeight - progressHeight - radius,
+                   Player.BREATH_BAR_WIDTH, progressHeight)
+  context.restore()
+}
+
 Player.prototype.draw = function(context) {
   if (!this.alive) {
     if (this.scale < 0.01)
       return
     this.scale -= 0.01
-    this.opacity -= 0.05
+    this.opacity -= 0.04
     if (this.opacity < 0)
     this.opacity = 0
     this.y += 1

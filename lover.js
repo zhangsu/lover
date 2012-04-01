@@ -4,17 +4,24 @@ function randInt(leftBound, rightBound) {
 
 ;(function () {
   var canvas = document.getElementById('viewport'),
-      context = canvas.getContext('2d'),
+      offscreenCanvas = document.createElement('canvas'),
+      screenContext = canvas.getContext('2d'),
+      context = offscreenCanvas.getContext('2d'),
       male, female, enemies = [],
       leftKeyDown = false,
       rightKeyDown = false,
       downKeyDown = false,
       upKeyDown = false,
       cursorX, cursorY, cursorOnScreen,
-      sampleSpaceX, sampleSpaceY
+      sampleSpaceX, sampleSpaceY,
+      underWaterGradient = context.createLinearGradient(0, 0, 0, canvas.height)
 
-  context.fillStyle = "rgb(90, 90, 255)"
-  context.fillRect(0, 0, canvas.width, canvas.height)
+  underWaterGradient.addColorStop(0, '#1e5799')
+  underWaterGradient.addColorStop(0.2, '#207cca')
+  underWaterGradient.addColorStop(1, '#7db9e8')
+
+  offscreenCanvas.setAttribute('width', canvas.width)
+  offscreenCanvas.setAttribute('height', canvas.height)
 
   male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
                     16, canvas.width, canvas.height, "male.png")
@@ -31,14 +38,6 @@ function randInt(leftBound, rightBound) {
 
   refresh()
 
-  function clear() {
-    enemies.forEach(function (sprite) {
-      sprite.clear(context)
-    })
-    male.clear(context)
-    female.clear(context)
-  }
-
   function refresh() {
     var sprites = enemies.slice(0)
     sprites.push(male)
@@ -49,6 +48,16 @@ function randInt(leftBound, rightBound) {
     sprites.forEach(function (sprite) {
       sprite.draw(context)
     })
+    drawFullscreenMask()
+    male.drawBreathBar(context)
+    female.drawBreathBar(context)
+    screenContext.drawImage(offscreenCanvas, 0, 0)
+  }
+
+  function drawFullscreenMask() {
+    context.globalAlpha = 0.5
+    context.fillStyle = underWaterGradient
+    context.fillRect(0, 0, canvas.width, canvas.height)
   }
 
   function checkEnemyCollisions() {
@@ -177,7 +186,6 @@ function randInt(leftBound, rightBound) {
 
   // Main logic layer loop.
   window.setInterval(function () {
-    clear()
     updateMalePosition()
     updateFemalePosition()
     updateEnemyPositions()

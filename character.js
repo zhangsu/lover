@@ -150,7 +150,7 @@ Character.prototype = {
   clear : function (context) {
     context.save()
     context.translate(-this.spriteWidth / 2, -this.spriteHeight / 2)
-    context.fillRect(this.x, this.y, this.spriteWidth, this.spriteHeight)
+    context.clearRect(this.x, this.y, this.spriteWidth, this.spriteHeight)
     context.restore()
   }
 }
