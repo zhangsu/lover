@@ -185,7 +185,7 @@ lover.context = lover.canvas.getContext('2d')
   }
 
   function spawnEnemy() {
-    enemies.push(new Enemy(20, "undead.png"))
+    enemies.push(new Enemy(50, "giantsquid.png"))
   }
 
   function refresh() {
