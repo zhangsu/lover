@@ -18,10 +18,12 @@ function Player(x, y, unitWidth, imagePath) {
 Player.prototype = Object.create(new Character())
 
 Player.prototype.updateBreath = function () {
-  if (this.besideLover && this.breath < this.maxBreath) {
+  if (this.besideLover) {
+    if (this.breath < this.maxBreath) {
       this.breath += this.breathRegenRate
       if (this.breath > this.maxBreath)
         this.breath = this.maxBreath
+    }
   } else if (this.breath > 0) {
     this.breath -= this.breathLoseRate
     if (this.breath <= 0) {
