@@ -28,11 +28,13 @@ function randInt(leftBound, rightBound) {
   female = new Player(randInt(canvas.width / 2, canvas.width),
                       randInt(0, canvas.height),
                       16, canvas.width, canvas.height, "female.png")
+  male.pace = 4
   male.breathBarX = Player.BREATH_BAR_MARGIN
   male.breath = male.maxBreath = 1200
   male.breathRegenRate = 2
   male.breathLoseRate = 4
 
+  female.pace = 5
   female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH - Player.BREATH_BAR_MARGIN
   female.breath = female.maxBreath = 1000
   female.breathRegenRate = 4
@@ -108,8 +110,12 @@ function randInt(leftBound, rightBound) {
     if (!female.alive || !cursorOnScreen)
       return
     var direction = female.followCursor(cursorX, cursorY)
-    if (female.colliding(male))
+    if (female.colliding(male)) {
+      female.besideLover = true
       female.undoMove(direction)
+    } else {
+      female.besideLover = false
+    }
   }
 
   function updateEnemyPositions() {
