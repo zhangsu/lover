@@ -28,13 +28,15 @@ function randInt(leftBound, rightBound) {
   female = new Player(randInt(canvas.width / 2, canvas.width),
                       randInt(0, canvas.height),
                       16, canvas.width, canvas.height, "female.png")
+  male.breathBarX = Player.BREATH_BAR_MARGIN
   male.breath = male.maxBreath = 1200
   male.breathRegenRate = 2
-  male.breathLoseRate = 5
+  male.breathLoseRate = 4
 
+  female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH - Player.BREATH_BAR_MARGIN
   female.breath = female.maxBreath = 1000
   female.breathRegenRate = 4
-  female.breathLoseRate = 7
+  female.breathLoseRate = 6
 
   refresh()
 

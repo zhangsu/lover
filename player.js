@@ -1,4 +1,7 @@
 Player.RETAIN_CURSOR_DIRECTION_COUNT = 3
+Player.BREATH_BAR_MARGIN = 10
+Player.BREATH_BAR_WIDTH = 50
+Player.BREATH_BAR_HEIGHT = 400
 
 function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   Character.call(this, x, y, unitWidth, canvasWidth, canvasHeight, imagePath)
@@ -9,6 +12,7 @@ function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
   this.maxBreath = 1000
   this.breathRegenRate = 2
   this.breathLoseRate = 5
+  this.breathBarX = Player.BREATH_BAR_MARGIN
 }
 
 Player.prototype = Object.create(new Character())
