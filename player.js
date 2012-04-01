@@ -3,8 +3,8 @@ Player.BREATH_BAR_MARGIN = 10
 Player.BREATH_BAR_WIDTH = 50
 Player.BREATH_BAR_HEIGHT = 400
 
-function Player(x, y, unitWidth, canvasWidth, canvasHeight, imagePath) {
-  Character.call(this, x, y, unitWidth, canvasWidth, canvasHeight, imagePath)
+function Player(x, y, unitWidth, imagePath) {
+  Character.call(this, x, y, unitWidth, imagePath)
   this.pace = 3
   this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
   this.besideLover = false
@@ -57,11 +57,12 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
   return direction
 }
 
-Player.prototype.drawBreathBar = function(context) {
-  var radius = Player.BREATH_BAR_WIDTH / 2
+Player.prototype.drawBreathBar = function() {
+  var context = lover.context,
+      radius = Player.BREATH_BAR_WIDTH / 2
   context.save()
   context.translate(this.breathBarX,
-                    (this.canvasHeight - Player.BREATH_BAR_HEIGHT) / 2)
+                    (lover.canvas.height - Player.BREATH_BAR_HEIGHT) / 2)
   context.globalAlpha = 0.5
   context.lineWidth = 3
   context.beginPath()
@@ -83,7 +84,7 @@ Player.prototype.drawBreathBar = function(context) {
   context.restore()
 }
 
-Player.prototype.draw = function(context) {
+Player.prototype.draw = function() {
   if (!this.alive) {
     if (this.scale < 0.01)
       return
@@ -93,9 +94,9 @@ Player.prototype.draw = function(context) {
     this.opacity = 0
     this.y += 1
   }
-  Character.prototype.draw.call(this, context)
+  Character.prototype.draw.call(this)
 }
 
-Player.prototype.die = function (context) {
+Player.prototype.die = function () {
   this.alive = false
 }

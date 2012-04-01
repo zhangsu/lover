@@ -2,38 +2,50 @@ function randInt(leftBound, rightBound) {
   return Math.floor(Math.random() * (rightBound - leftBound)) + leftBound
 }
 
+var lover = {
+  canvas : document.createElement('canvas'),
+  mask : document.createElement('canvas')
+}
+
+lover.context = lover.canvas.getContext('2d')
+
 ;(function () {
   var canvas = document.getElementById('viewport'),
-      offscreenCanvas = document.createElement('canvas'),
-      screenContext = canvas.getContext('2d'),
-      context = offscreenCanvas.getContext('2d'),
+      context = canvas.getContext('2d'),
       male, female, enemies = [],
       leftKeyDown = false,
       rightKeyDown = false,
       downKeyDown = false,
       upKeyDown = false,
+
       cursorX, cursorY, cursorOnScreen,
       sampleSpaceX, sampleSpaceY,
-      underWaterGradient =
-        context.createLinearGradient(0, 0, 0, canvas.height)
+      score = 0
 
-  underWaterGradient.addColorStop(0, '#1e5799')
-  underWaterGradient.addColorStop(0.2, '#207cca')
-  underWaterGradient.addColorStop(1, '#7db9e8')
+  lover.canvas.setAttribute('width', canvas.width)
+  lover.canvas.setAttribute('height', canvas.height)
+  lover.mask.setAttribute('width', canvas.width)
+  lover.mask.setAttribute('height', canvas.height)
 
   Player.breathBarGradient =
-    context.createLinearGradient(0, 0, 0, canvas.height)
+    lover.context.createLinearGradient(0, 0, 0, canvas.height)
   Player.breathBarGradient.addColorStop(0, '#5fffff')
   Player.breathBarGradient.addColorStop(1, '#7db9e8')
 
-  offscreenCanvas.setAttribute('width', canvas.width)
-  offscreenCanvas.setAttribute('height', canvas.height)
+  var maskContext = lover.mask.getContext('2d'),
+      underWaterGradient =
+        maskContext.createLinearGradient(0, 0, 0, canvas.height)
+  underWaterGradient.addColorStop(0, '#1e5799')
+  underWaterGradient.addColorStop(0.2, '#207cca')
+  underWaterGradient.addColorStop(1, '#7db9e8')
+  maskContext.globalAlpha = 0.6
+  maskContext.fillStyle = underWaterGradient
+  maskContext.fillRect(0, 0, canvas.width, canvas.height)
 
   male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
-                    16, canvas.width, canvas.height, "male.png")
+                    16, "male.png")
   female = new Player(randInt(canvas.width / 2, canvas.width),
-                      randInt(0, canvas.height),
-                      16, canvas.width, canvas.height, "female.png")
+                      randInt(0, canvas.height), 16, "female.png")
   male.pace = 4
   male.breathBarX = Player.BREATH_BAR_MARGIN
   male.breath = male.maxBreath = 1200
@@ -47,7 +59,16 @@ function randInt(leftBound, rightBound) {
   female.breathRegenRate = 4
   female.breathLoseRate = 6
 
-  refresh()
+  lover.context.drawImage(lover.mask, 0, 0)
+
+  // Spawn enemies.
+  for (var i = 0; i < 20; ++i)
+    spawnEnemy()
+  window.setInterval(spawnEnemy, 5000)
+
+  function spawnEnemy() {
+    enemies.push(new Enemy(20, "undead.png"))
+  }
 
   function refresh() {
     var sprites = enemies.slice(0)
@@ -57,18 +78,29 @@ function randInt(leftBound, rightBound) {
       return a.y - b.y
     })
     sprites.forEach(function (sprite) {
-      sprite.draw(context)
+      sprite.draw()
     })
     drawFullscreenMask()
-    male.drawBreathBar(context)
-    female.drawBreathBar(context)
-    screenContext.drawImage(offscreenCanvas, 0, 0)
+    male.drawBreathBar()
+    female.drawBreathBar()
+    drawScore()
+    context.drawImage(lover.canvas, 0, 0)
   }
 
   function drawFullscreenMask() {
+    var context = lover.context
     context.globalAlpha = 0.5
     context.fillStyle = underWaterGradient
     context.fillRect(0, 0, canvas.width, canvas.height)
+  }
+
+  function drawScore() {
+    var context = lover.context
+    context.font = "30pt Arial";
+    context.textAlign = "center";
+    context.fillStyle = "rgb(10,80,255)";
+    context.fillText(score, canvas.width / 2,
+                     canvas.height + canvas.offsetTop - 50);
   }
 
   function checkEnemyCollisions() {
@@ -78,6 +110,12 @@ function randInt(leftBound, rightBound) {
       if (female.colliding(enemy))
         female.die()
     })
+  }
+
+  function updateScore() {
+    if (male.alive || female.alive) {
+      score += randInt(1, 11)
+    }
   }
 
   function updateMalePosition() {
@@ -96,7 +134,7 @@ function randInt(leftBound, rightBound) {
       male.moving = false
       return
     }
-    
+
     if (male.colliding(female)) {
       male.besideLover = true
       if (leftKeyDown)
@@ -127,7 +165,7 @@ function randInt(leftBound, rightBound) {
 
   function updateEnemyPositions() {
     enemies.forEach(function (enemy) {
-      enemy.move(canvas.width, canvas.height)
+      enemy.move()
     })
   }
 
@@ -206,15 +244,7 @@ function randInt(leftBound, rightBound) {
     updateEnemyPositions()
     checkEnemyCollisions()
     updateBreaths()
+    updateScore()
     refresh()
   }, 50)
-  
-  function spawnEnemy() {
-    enemies.push(new Enemy(20, canvas.width, canvas.height, "undead.png"))
-  }
-
-  // Spawn enemies.
-  for (var i = 0; i < 20; ++i)
-    spawnEnemy()
-  window.setInterval(spawnEnemy, 5000)
 })()
