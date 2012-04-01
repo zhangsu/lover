@@ -88,8 +88,8 @@ lover.context = lover.canvas.getContext('2d')
   }, true);
 
   window.addEventListener("mousemove", function (e) {
-    var x = e.clientX - canvas.offsetLeft
-    var y = e.clientY - canvas.offsetTop
+    var x = e.pageX - canvas.offsetLeft
+    var y = e.pageY - canvas.offsetTop
     if (0 < x && x < canvas.width && 0 < y && y < canvas.height) {
       cursorOnScreen = true
       cursorX = x
@@ -132,6 +132,7 @@ lover.context = lover.canvas.getContext('2d')
     var pressToContinue = window.addEventListener("keypress", cont)
 
     function cont(e) {
+      e.preventDefault()
       window.removeEventListener('click', cont)
       window.removeEventListener('keypress', cont)
       restart()
