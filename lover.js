@@ -20,7 +20,8 @@ lover.context = lover.canvas.getContext('2d')
 
       cursorX, cursorY, cursorOnScreen,
       sampleSpaceX, sampleSpaceY,
-      score = 0
+      score = 0,
+      started = false
 
   lover.canvas.setAttribute('width', canvas.width)
   lover.canvas.setAttribute('height', canvas.height)
@@ -41,30 +42,146 @@ lover.context = lover.canvas.getContext('2d')
   maskContext.globalAlpha = 0.6
   maskContext.fillStyle = underWaterGradient
   maskContext.fillRect(0, 0, canvas.width, canvas.height)
+  
+  gotoPrepareScreen()
 
-  male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
-                    16, "male.png")
-  female = new Player(randInt(canvas.width / 2, canvas.width),
-                      randInt(0, canvas.height), 16, "female.png")
-  male.pace = 4
-  male.breathBarX = Player.BREATH_BAR_MARGIN
-  male.breath = male.maxBreath = 1200
-  male.breathRegenRate = 2
-  male.breathLoseRate = 4
-
-  female.pace = 5
-  female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH
-                      - Player.BREATH_BAR_MARGIN
-  female.breath = female.maxBreath = 1000
-  female.breathRegenRate = 4
-  female.breathLoseRate = 6
-
-  lover.context.drawImage(lover.mask, 0, 0)
-
-  // Spawn enemies.
-  for (var i = 0; i < 20; ++i)
-    spawnEnemy()
   window.setInterval(spawnEnemy, 5000)
+
+  window.addEventListener('keydown', function (e) {
+    switch (e.keyCode) {
+    case 37:
+      leftKeyDown = true
+      break
+    case 38:
+      upKeyDown = true
+      break
+    case 39:
+      rightKeyDown = true
+      break
+    case 40:
+      downKeyDown = true
+      break
+    default:
+      return true
+    }
+    e.preventDefault()
+  }, true);
+
+  window.addEventListener('keyup', function (e) {
+    switch (e.keyCode) {
+    case 37:
+      leftKeyDown = false
+      break
+    case 38:
+      upKeyDown = false
+      break
+    case 39:
+      rightKeyDown = false
+      break
+    case 40:
+      downKeyDown = false
+      break
+    default:
+      return true
+    }
+    e.preventDefault()
+  }, true);
+
+  window.addEventListener("mousemove", function (e) {
+    var x = e.clientX - canvas.offsetLeft
+    var y = e.clientY - canvas.offsetTop
+    if (0 < x && x < canvas.width && 0 < y && y < canvas.height) {
+      cursorOnScreen = true
+      cursorX = x
+      cursorY = y
+      e.preventDefault()
+    } else {
+      cursorOnScreen = false
+      if (female)
+        female.moving = false
+    }
+  }, true)
+
+  window.addEventListener("blur", function (e) {
+    leftKeyDown = false
+    upKeyDown = false
+    rightKeyDown = false
+    downKeyDown = false
+    cursorOnScreen = false
+    if (female)
+      female.moving = false
+  }, true)
+
+  // Main logic layer loop.
+  var mainUpdater = window.setInterval(function () {
+    updateEnemyPositions()
+    if (started) {
+      updateMalePosition()
+      updateFemalePosition()
+      checkEnemyCollisions()
+      updateBreaths()
+      updateScore()
+    }
+    refresh()
+  }, 50)
+
+  function gotoPrepareScreen() {
+    score = 0
+    started = false
+    var clickToContinue = window.addEventListener("click", cont)
+    var pressToContinue = window.addEventListener("keypress", cont)
+
+    function cont(e) {
+      window.removeEventListener('click', cont)
+      window.removeEventListener('keypress', cont)
+      restart()
+    }
+
+    showHighscores()
+  }
+
+  function restart() {
+    male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
+                      16, "male.png"),
+    male.pace = 4
+    male.breathBarX = Player.BREATH_BAR_MARGIN
+    male.breath = male.maxBreath = 1200
+    male.breathRegenRate = 2
+    male.breathLoseRate = 4
+
+    female = new Player(randInt(canvas.width / 2, canvas.width),
+                        randInt(0, canvas.height), 16, "female.png")
+    female.pace = 5
+    female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH
+                        - Player.BREATH_BAR_MARGIN
+    female.breath = female.maxBreath = 1000
+    female.breathRegenRate = 4
+    female.breathLoseRate = 6
+    enemies = []
+    // Spawn enemies.
+    for (var i = 0; i < 20; ++i)
+      spawnEnemy()
+    started = true
+  }
+
+  function showHighscores() {
+    if (!Storage)
+      return
+
+    var highscoreDiv = document.getElementById("highscore")
+    highscoreDiv.innerHTML = ''
+
+    if (localStorage.highscores) {
+      JSON.parse(localStorage.highscores).forEach(function (score) {
+        var scoreDiv = document.createElement("div"),
+            text = document.createTextNode(score)
+        scoreDiv.appendChild(text)
+        highscoreDiv.appendChild(scoreDiv)
+      })
+    } else {
+      localStorage.highscores = JSON.stringify([])
+    }
+  }
 
   function spawnEnemy() {
     enemies.push(new Enemy(20, "undead.png"))
@@ -72,8 +189,10 @@ lover.context = lover.canvas.getContext('2d')
 
   function refresh() {
     var sprites = enemies.slice(0)
-    sprites.push(male)
-    sprites.push(female)
+    if (male)
+      sprites.push(male)
+    if (female)
+      sprites.push(female)
     sprites.sort(function (a, b) {
       return a.y - b.y
     })
@@ -81,10 +200,21 @@ lover.context = lover.canvas.getContext('2d')
       sprite.draw()
     })
     drawFullscreenMask()
-    male.drawBreathBar()
-    female.drawBreathBar()
-    drawScore()
+    if (male)
+      male.drawBreathBar()
+    if (female)
+      female.drawBreathBar()
+    if (started)
+      drawScore()
+    else
+      drawPrepareScreen()
     context.drawImage(lover.canvas, 0, 0)
+  }
+
+  function drawPrepareScreen() {
+    var context = lover.context
+    context.fillStyle = 'black'
+    context.fillRect(0, 0, canvas.width, canvas.height)
   }
 
   function drawFullscreenMask() {
@@ -115,6 +245,12 @@ lover.context = lover.canvas.getContext('2d')
   function updateScore() {
     if (male.alive || female.alive) {
       score += randInt(1, 11)
+    } else if (started) {
+      var highscores = JSON.parse(localStorage.highscores)
+      highscores.push(score)
+      highscores.sort(function (a, b) { return b - a })
+      localStorage.highscores = JSON.stringify(highscores.slice(0, 10))
+      gotoPrepareScreen()
     }
   }
 
@@ -173,78 +309,4 @@ lover.context = lover.canvas.getContext('2d')
     male.updateBreath()
     female.updateBreath()
   }
-
-  window.addEventListener('keydown', function (e) {
-    switch (e.keyCode) {
-    case 37:
-      leftKeyDown = true
-      break
-    case 38:
-      upKeyDown = true
-      break
-    case 39:
-      rightKeyDown = true
-      break
-    case 40:
-      downKeyDown = true
-      break
-    default:
-      return true
-    }
-    e.preventDefault()
-  }, true);
-
-  window.addEventListener('keyup', function (e) {
-    switch (e.keyCode) {
-    case 37:
-      leftKeyDown = false
-      break
-    case 38:
-      upKeyDown = false
-      break
-    case 39:
-      rightKeyDown = false
-      break
-    case 40:
-      downKeyDown = false
-      break
-    default:
-      return true
-    }
-    e.preventDefault()
-  }, true);
-
-  window.addEventListener("mousemove", function (e) {
-    var x = e.clientX - canvas.offsetLeft
-    var y = e.clientY - canvas.offsetTop
-    if (0 < x && x < canvas.width && 0 < y && y < canvas.height) {
-      cursorOnScreen = true
-      cursorX = x
-      cursorY = y
-      e.preventDefault()
-    } else {
-      cursorOnScreen = false
-      female.moving = false
-    }
-  }, true)
-
-  window.addEventListener("blur", function (e) {
-    leftKeyDown = false
-    upKeyDown = false
-    rightKeyDown = false
-    downKeyDown = false
-    cursorOnScreen = false
-    female.moving = false
-  }, true)
-
-  // Main logic layer loop.
-  window.setInterval(function () {
-    updateMalePosition()
-    updateFemalePosition()
-    updateEnemyPositions()
-    checkEnemyCollisions()
-    updateBreaths()
-    updateScore()
-    refresh()
-  }, 50)
 })()
