@@ -14,11 +14,17 @@ function randInt(leftBound, rightBound) {
       upKeyDown = false,
       cursorX, cursorY, cursorOnScreen,
       sampleSpaceX, sampleSpaceY,
-      underWaterGradient = context.createLinearGradient(0, 0, 0, canvas.height)
+      underWaterGradient =
+        context.createLinearGradient(0, 0, 0, canvas.height)
 
   underWaterGradient.addColorStop(0, '#1e5799')
   underWaterGradient.addColorStop(0.2, '#207cca')
   underWaterGradient.addColorStop(1, '#7db9e8')
+
+  Player.breathBarGradient =
+    context.createLinearGradient(0, 0, 0, canvas.height)
+  Player.breathBarGradient.addColorStop(0, '#5fffff')
+  Player.breathBarGradient.addColorStop(1, '#7db9e8')
 
   offscreenCanvas.setAttribute('width', canvas.width)
   offscreenCanvas.setAttribute('height', canvas.height)
@@ -35,7 +41,8 @@ function randInt(leftBound, rightBound) {
   male.breathLoseRate = 4
 
   female.pace = 5
-  female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH - Player.BREATH_BAR_MARGIN
+  female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH
+                      - Player.BREATH_BAR_MARGIN
   female.breath = female.maxBreath = 1000
   female.breathRegenRate = 4
   female.breathLoseRate = 6

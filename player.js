@@ -77,7 +77,7 @@ Player.prototype.drawBreathBar = function(context) {
   var barHeight = Player.BREATH_BAR_HEIGHT + radius * 2
   var progressHeight =
     this.alive ? Math.round(this.breath / this.maxBreath * barHeight) : 0
-  context.fillStyle = "rgb(95, 255, 255)"
+  context.fillStyle = Player.breathBarGradient
   context.fillRect(0, barHeight - progressHeight - radius,
                    Player.BREATH_BAR_WIDTH, progressHeight)
   context.restore()
