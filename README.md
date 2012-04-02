@@ -1,5 +1,7 @@
 # Lover
 
+A product of MolyJam Toronto 2012.
+
 Imagine yourself underwater, drowning desperately. The only way to make you able to breath and survive there is to get close to your loved one and hug him/her with a passion. No, just walk beside him/her is not enough; you have to move toward him/her!
 
 ## Control
