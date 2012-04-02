@@ -20,6 +20,7 @@ lover.context = lover.canvas.getContext('2d')
 
       cursorX, cursorY, cursorOnScreen,
       sampleSpaceX, sampleSpaceY,
+      maleHuggingFemale, femaleHuggingMale,
       score = 0,
       started = false
 
@@ -279,11 +280,10 @@ lover.context = lover.canvas.getContext('2d')
       male.moveDown()
     else {
       male.moving = false
-      return
     }
 
     if (male.colliding(female)) {
-      male.besideLover = true
+      male.huggingLover = true
       if (leftKeyDown)
         male.undoMoveLeft()
       else if (rightKeyDown)
@@ -294,7 +294,7 @@ lover.context = lover.canvas.getContext('2d')
         male.undoMoveDown()
       male.moving = false
     } else {
-      male.besideLover = false
+      male.huggingLover = false
     }
   }
 
@@ -303,16 +303,16 @@ lover.context = lover.canvas.getContext('2d')
       return
     var direction = female.followCursor(cursorX, cursorY)
     if (female.colliding(male)) {
-      female.besideLover = true
+      female.huggingLover = true
       female.undoMove(direction)
     } else {
-      female.besideLover = false
+      female.huggingLover = false
     }
   }
 
   function updateRecoverySound() {
     var sound = document.getElementById('recovery-sound')
-    if (male.besideLover || female.besideLover)
+    if (male.huggingLover || female.huggingLover)
       sound.play()
     else
       sound.pause()
