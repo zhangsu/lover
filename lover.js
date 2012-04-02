@@ -145,7 +145,7 @@ lover.context = lover.canvas.getContext('2d')
 
   function restart() {
     male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
-                      16, "male.png"),
+                      16, "img/male.png"),
     male.pace = 4
     male.breathBarX = Player.BREATH_BAR_MARGIN
     male.breath = male.maxBreath = 1200
@@ -153,7 +153,7 @@ lover.context = lover.canvas.getContext('2d')
     male.breathLoseRate = 4
 
     female = new Player(randInt(canvas.width / 2, canvas.width),
-                        randInt(0, canvas.height), 16, "female.png")
+                        randInt(0, canvas.height), 16, "img/female.png")
     female.pace = 5
     female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH
                         - Player.BREATH_BAR_MARGIN
@@ -187,7 +187,7 @@ lover.context = lover.canvas.getContext('2d')
   }
 
   function spawnEnemy() {
-    enemies.push(new Enemy(50, "giantsquid.png"))
+    enemies.push(new Enemy(50, "img/giantsquid.png"))
   }
 
   function refresh() {

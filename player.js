@@ -14,7 +14,7 @@ function Player(x, y, unitWidth, imagePath) {
   this.breathLoseRate = 5
   this.breathBarX = Player.BREATH_BAR_MARGIN
   this.heartImage = new Image()
-  this.heartImage.src = "heart.png"
+  this.heartImage.src = "img/heart.png"
   this.heartScale = 0.1
 }
 
