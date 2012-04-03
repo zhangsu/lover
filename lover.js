@@ -141,7 +141,6 @@ lover.context = lover.canvas.getContext('2d')
   }, 50)
 
   function gotoPrepareScreen() {
-    score = 0
     started = false
     var clickToContinue = window.addEventListener("click", cont)
     var pressToContinue = window.addEventListener("keypress", cont)
@@ -166,6 +165,7 @@ lover.context = lover.canvas.getContext('2d')
     for (var i = 0; i < 20; ++i)
       spawnEnemy()
     started = true
+    score = 0
   }
 
   function showHighscores() {
@@ -208,9 +208,8 @@ lover.context = lover.canvas.getContext('2d')
       male.drawBreathBar()
     if (female)
       female.drawBreathBar()
-    if (started)
-      drawScore()
-    else
+    drawScore()
+    if (!started)
       drawPrepareScreen()
     context.drawImage(lover.canvas, 0, 0)
   }
