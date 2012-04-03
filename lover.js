@@ -23,6 +23,10 @@ lover.context = lover.canvas.getContext('2d')
       maleHuggingFemale, femaleHuggingMale,
       score = 0,
       started = false
+  
+  var bgMusic = document.getElementById('bg-music')
+  bgMusic.volume = 0.3
+  bgMusic.play()
 
   lover.canvas.setAttribute('width', canvas.width)
   lover.canvas.setAttribute('height', canvas.height)
@@ -145,21 +149,9 @@ lover.context = lover.canvas.getContext('2d')
 
   function restart() {
     male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
-                      16, "img/male.png"),
-    male.pace = 4
-    male.breathBarX = Player.BREATH_BAR_MARGIN
-    male.breath = male.maxBreath = 1200
-    male.breathRegenRate = 2
-    male.breathLoseRate = 4
-
+                      16, "male", "img/male.png"),
     female = new Player(randInt(canvas.width / 2, canvas.width),
-                        randInt(0, canvas.height), 16, "img/female.png")
-    female.pace = 5
-    female.breathBarX = canvas.width - Player.BREATH_BAR_WIDTH
-                        - Player.BREATH_BAR_MARGIN
-    female.breath = female.maxBreath = 1000
-    female.breathRegenRate = 4
-    female.breathLoseRate = 6
+                        randInt(0, canvas.height), 16, "female", "img/female.png")
     enemies = []
     // Spawn enemies.
     for (var i = 0; i < 20; ++i)
@@ -216,11 +208,11 @@ lover.context = lover.canvas.getContext('2d')
 
   function drawPrepareScreen() {
     var context = lover.context
-    context.fillStyle = 'black'
+    context.fillStyle = "black"
     context.fillRect(0, 0, canvas.width, canvas.height)
     var x = canvas.width / 2
     context.textAlign = "center"
-    context.fillStyle = 'white'
+    context.fillStyle = "white"
     context.font = "20pt Arial"
     context.fillText("Move mouse to move the girl", x, 150)
     context.fillText("Use arrow keys to move the boy", x, 200)

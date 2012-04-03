@@ -1,21 +1,36 @@
-Player.RETAIN_CURSOR_DIRECTION_COUNT = 3
+Player.TURTLE_MOVE_DURATION = 3
 Player.BREATH_BAR_MARGIN = 10
 Player.BREATH_BAR_WIDTH = 50
 Player.BREATH_BAR_HEIGHT = 400
 
-function Player(x, y, unitWidth, imagePath) {
+function Player(x, y, unitWidth, gender, imagePath) {
   Character.call(this, x, y, unitWidth, imagePath)
-  this.pace = 3
-  this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
+  this.turtleMoveCount = Player.TURTLE_MOVE_DURATION
   this.huggingLover = false
-  this.breath = 1000
-  this.maxBreath = 1000
-  this.breathRegenRate = 2
-  this.breathLoseRate = 5
-  this.breathBarX = Player.BREATH_BAR_MARGIN
   this.heartImage = new Image()
   this.heartImage.src = "img/heart.png"
   this.heartScale = 0.1
+  this.gender = gender
+  if (gender == "male") {
+    this.pace = 4
+    this.breathBarX = Player.BREATH_BAR_MARGIN
+    this.breath = this.maxBreath = 1200
+    this.breathRegenRate = 2
+    this.breathLoseRate = 4
+  } else if (gender == "female") {
+    this.pace = 6
+    this.breathBarX = lover.canvas.width - Player.BREATH_BAR_WIDTH
+                        - Player.BREATH_BAR_MARGIN
+    this.breath = this.maxBreath = 1000
+    this.breathRegenRate = 4
+    this.breathLoseRate = 6
+  } else {
+    this.pace = 3
+    this.breathBarX = Player.BREATH_BAR_MARGIN
+    this.breath = this.maxBreath = 1000
+    this.breathRegenRate = 2
+    this.breathLoseRate = 5
+  }
 }
 
 Player.prototype = Object.create(new Character())
@@ -37,10 +52,10 @@ Player.prototype.updateBreath = function () {
 }
 
 Player.prototype.cursorDirection = function (deltaX, deltaY, cursorX, cursorY) {
-  if ((--this.retainCursorDirectionCount) > 0)
+  if ((--this.turtleMoveCount) > 0)
     return this.orientation
   else
-    this.retainCursorDirectionCount = Player.RETAIN_CURSOR_DIRECTION_COUNT
+    this.turtleMoveCount = Player.TURTLE_MOVE_DURATION
 
   if (deltaX < deltaY)
     return this.y < cursorY ? 0 : 3
@@ -108,6 +123,10 @@ Player.prototype.draw = function() {
 }
 
 Player.prototype.die = function () {
+  if (this.gender == "male")
+    document.getElementById("boy-death-sound").play()
+  else if (this.gender == "female")
+    document.getElementById("girl-death-sound").play()
   this.alive = false
   this.huggingLover = false
 }
