@@ -225,9 +225,10 @@ lover.context = lover.canvas.getContext('2d')
     context.font = "20pt Arial"
     context.fillText("Move mouse to move the girl", x, 150)
     context.fillText("Use arrow keys to move the boy", x, 200)
-    context.fillText("Move toward and face each other to survive!", x, 300)
+    context.fillText("Avoid the evil sea monsters!", x, 300)
+    context.fillText("Move toward and hug each other to survive!", x, 350)
     context.font = "30pt Arial"
-    context.fillText("Continue", x, 400)
+    context.fillText("Continue", x, 450)
   }
 
   function drawFullscreenMask() {
