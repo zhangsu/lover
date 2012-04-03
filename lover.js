@@ -166,6 +166,13 @@ lover.context = lover.canvas.getContext('2d')
       spawnEnemy()
     started = true
     score = 0
+
+    var boyDeathSound = document.getElementById("boy-death-sound")
+    var girlDeathSound = document.getElementById("girl-death-sound")
+    boyDeathSound.pause()
+    girlDeathSound.pause()
+    boyDeathSound.currentTime = 0
+    girlDeathSound.currentTime = 0
   }
 
   function showHighscores() {
