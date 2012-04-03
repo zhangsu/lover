@@ -17,8 +17,8 @@ lover.context = lover.canvas.getContext('2d')
       rightKeyDown = false,
       downKeyDown = false,
       upKeyDown = false,
-
-      cursorX, cursorY, cursorOnScreen,
+      cursorX, cursorY, hasFocus = true,
+      cursorOnScreen,
       sampleSpaceX, sampleSpaceY,
       maleHuggingFemale, femaleHuggingMale,
       score = 0,
@@ -93,6 +93,11 @@ lover.context = lover.canvas.getContext('2d')
   }, true);
 
   window.addEventListener("mousemove", function (e) {
+    if (!hasFocus) {
+      cursorOnScreen = false
+      female.huggingLover = false
+      return
+    }
     var x = e.pageX - canvas.offsetLeft
     var y = e.pageY - canvas.offsetTop
     if (0 < x && x < canvas.width && 0 < y && y < canvas.height) {
@@ -107,12 +112,16 @@ lover.context = lover.canvas.getContext('2d')
     }
   }, true)
 
+  window.addEventListener("focus", function (e) {
+    hasFocus = true
+    leftKeyDown = upKeyDown = rightKeyDown = downKeyDown = false
+    if (female)
+      female.moving = false
+  }, true)
+
   window.addEventListener("blur", function (e) {
-    leftKeyDown = false
-    upKeyDown = false
-    rightKeyDown = false
-    downKeyDown = false
-    cursorOnScreen = false
+    hasFocus = false
+    leftKeyDown = upKeyDown = rightKeyDown = downKeyDown = false
     if (female)
       female.moving = false
   }, true)
