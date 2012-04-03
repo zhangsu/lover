@@ -2,14 +2,21 @@ Player.TURTLE_MOVE_DURATION = 3
 Player.BREATH_BAR_MARGIN = 10
 Player.BREATH_BAR_WIDTH = 50
 Player.BREATH_BAR_HEIGHT = 400
+Player.HEART_SCALE = 0.1
 
 function Player(x, y, unitWidth, gender, imagePath) {
   Character.call(this, x, y, unitWidth, imagePath)
   this.turtleMoveCount = Player.TURTLE_MOVE_DURATION
   this.huggingLover = false
-  this.heartImage = new Image()
-  this.heartImage.src = "img/heart.png"
-  this.heartScale = 0.1
+  this.heart = new Image()
+  this.heart.src = "img/heart.png"
+  var self = this
+  this.heart.onload = function () {
+      self.heartWidth = this.width
+      self.heartHeight = this.height
+  }
+  this.heartScale = Player.HEART_SCALE
+  this.heartOpacity = 1.0
   this.gender = gender
   if (gender == "male") {
     this.pace = 4
@@ -104,6 +111,22 @@ Player.prototype.drawBreathBar = function() {
   context.restore()
 }
 
+Player.prototype.animateHeart = function() {
+  var context = lover.context
+  context.save()
+  this.heartScale += 0.01
+  if (this.heartScale >= 2 * Player.HEART_SCALE)
+    this.heartScale = Player.HEART_SCALE
+  this.heartOpacity -= 0.05
+  if (this.heartOpacity <= 0)
+    this.heartOpacity = 1.0
+  var width = Math.round(this.heartWidth * this.heartScale),
+      height = Math.round(this.heartHeight * this.heartScale);
+  context.globalAlpha = this.heartOpacity
+  context.drawImage(this.heart, this.x - width / 2, this.y - height / 2, width, height)
+  context.restore()
+}
+
 Player.prototype.draw = function() {
   Character.prototype.draw.call(this)
   if (!this.alive) {
@@ -115,14 +138,13 @@ Player.prototype.draw = function() {
     this.opacity = 0
     this.y += 1
   } else if (this.huggingLover) {
-    var context = lover.context
-   /* if (scale < 
-    this.heartScale -= 0.01*/
-    context.drawImage(this.heartImage, this.x - 10, this.y - 10, 20, 20)
+    this.animateHeart()
   }
 }
 
 Player.prototype.die = function () {
+  if (!this.alive)
+    return
   if (this.gender == "male")
     document.getElementById("boy-death-sound").play()
   else if (this.gender == "female")
