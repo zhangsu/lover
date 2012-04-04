@@ -93,7 +93,8 @@ lover.context = lover.canvas.getContext('2d')
   window.addEventListener("mousemove", function (e) {
     if (!hasFocus) {
       cursorOnScreen = false
-      female.huggingLover = false
+      if (female)
+        female.huggingLover = false
       return
     }
     var x = e.pageX - canvas.offsetLeft
