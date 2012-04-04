@@ -12,11 +12,14 @@ Lover.context = Lover.canvas.getContext('2d')
   var canvas = document.getElementById('viewport'),
       context = canvas.getContext('2d'),
       offscreenCanvas = Lover.canvas,
+      offscreenContext = Lover.context,
       mask = Lover.mask,
+      bgMusic = document.getElementById('bg-music'),
+
       enemies = [],
       score = 0,
-      started = false,
-      bgMusic = document.getElementById('bg-music')
+      started = false
+
   bgMusic.volume = 0.3
   bgMusic.play()
 
@@ -31,24 +34,19 @@ Lover.context = Lover.canvas.getContext('2d')
   mask.setAttribute('height', canvas.height)
 
   Player.breathBarGradient =
-    Lover.context.createLinearGradient(0, 0, 0, canvas.height)
+    offscreenContext.createLinearGradient(0, 0, 0, canvas.height)
   Player.breathBarGradient.addColorStop(0, '#5fffff')
   Player.breathBarGradient.addColorStop(1, '#7db9e8')
 
-  var maskContext = mask.getContext('2d'),
-      underWaterGradient =
-        maskContext.createLinearGradient(0, 0, 0, canvas.height)
+  var underWaterGradient =
+        offscreenContext.createLinearGradient(0, 0, 0, canvas.height)
   underWaterGradient.addColorStop(0, '#1e5799')
   underWaterGradient.addColorStop(0.2, '#207cca')
   underWaterGradient.addColorStop(1, '#7db9e8')
-  maskContext.globalAlpha = 0.6
-  maskContext.fillStyle = underWaterGradient
-  maskContext.fillRect(0, 0, canvas.width, canvas.height)
-  
+
   gotoPromptScreen()
 
   window.setInterval(spawnEnemy, 7500)
-
 
   // Main logic layer loop.
   var mainUpdater = window.setInterval(function () {

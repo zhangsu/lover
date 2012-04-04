@@ -5,6 +5,8 @@ function Character(x, y, unitWidth, imagePath) {
   this.x = x || 0
   this.y = y || 0
   this.unitWidth = unitWidth || 20
+  this.alive = true
+
   this.spriteFrame = 0
   this.orientation = 0
   this.scale = 1.0
@@ -18,7 +20,6 @@ function Character(x, y, unitWidth, imagePath) {
     }
     this.image.src = imagePath
   }
-
   var self = this
   window.setInterval(function () {
     if (self.moving) {
@@ -28,8 +29,6 @@ function Character(x, y, unitWidth, imagePath) {
       self.spriteFrame = 0
     }
   }, this.pace * 50)
-
-  this.alive = true
 }
 
 Character.prototype = {
