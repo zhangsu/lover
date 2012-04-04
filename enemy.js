@@ -27,6 +27,8 @@ function Enemy(unitWidth, imagePath) {
     this.y = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)
     break
   }
+  // Enemies are always moving.
+  this.moving = true
   this.pace = 5
   this.turtleMoveCount = Enemy.TURTLE_MOVE_COUNT
 }

@@ -8,6 +8,7 @@ function Character(x, y, unitWidth, imagePath) {
   this.alive = true
 
   this.spriteFrame = 0
+  this.spriteFrameCount = 0
   this.orientation = 0
   this.scale = 1.0
   this.opacity = 1.0
@@ -20,15 +21,6 @@ function Character(x, y, unitWidth, imagePath) {
     }
     this.image.src = imagePath
   }
-  var self = this
-  window.setInterval(function () {
-    if (self.moving) {
-      ++self.spriteFrame
-      self.spriteFrame %= Character.FRAME_COUNT
-    } else {
-      self.spriteFrame = 0
-    }
-  }, this.pace * 50)
 }
 
 Character.prototype = {
@@ -132,6 +124,13 @@ Character.prototype = {
   },
 
   draw : function () {
+    ++this.spriteFrameCount
+    if (this.spriteFrameCount > (this.moving ? this.pace : this.pace * 2)) {
+      ++this.spriteFrame
+      this.spriteFrame %= Character.FRAME_COUNT
+      this.spriteFrameCount = 0
+    }
+
     var context = Lover.context
     var width = Math.round(this.spriteWidth * this.scale)
     var height = Math.round(this.spriteHeight * this.scale)
