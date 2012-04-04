@@ -1,10 +1,9 @@
-function randInt(leftBound, rightBound) {
-  return Math.floor(Math.random() * (rightBound - leftBound)) + leftBound
-}
-
 var Lover = {
   canvas : document.createElement('canvas'),
   mask : document.createElement('canvas'),
+  randInt: function (leftBound, rightBound) {
+    return Math.floor(Math.random() * (rightBound - leftBound)) + leftBound
+  }
 }
 
 Lover.context = Lover.canvas.getContext('2d')
@@ -81,6 +80,7 @@ Lover.context = Lover.canvas.getContext('2d')
   }
 
   function restart() {
+    var randInt = Lover.randInt
     Lover.male = new Player(randInt(0, canvas.width / 2), randInt(0, canvas.height),
       16, "male", "img/male.png"),
     Lover.female = new Player(randInt(canvas.width / 2, canvas.width),
@@ -191,7 +191,7 @@ Lover.context = Lover.canvas.getContext('2d')
 
   function updateScore() {
     if (Lover.male.alive || Lover.female.alive) {
-      score += randInt(1, 11)
+      score += Lover.randInt(1, 11)
     } else if (started) {
       var highscores = JSON.parse(localStorage.highscores)
       highscores.push(score)
@@ -212,7 +212,7 @@ Lover.context = Lover.canvas.getContext('2d')
       male.moveRight()
     else if (Lover.upKeyDown)
       male.moveUp()
-    else if (Lover.ownKeyDown)
+    else if (Lover.downKeyDown)
       male.moveDown()
     else {
       male.moving = false
