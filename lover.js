@@ -235,13 +235,13 @@ Lover.context = Lover.canvas.getContext('2d')
   }
 
   function updateFemalePosition() {
-    var female = Lover.female, cursorOnScreen = Lover.cursorOnScreen
+    var female = Lover.female, mouseOnScreen = Lover.mouseOnScreen
     if (!female.alive)
       return
     var direction
-    if (cursorOnScreen)
-      direction = female.followCursor(Lover.cursorX, Lover.cursorY)
-    if (female.colliding(Lover.male) && cursorOnScreen) {
+    if (mouseOnScreen)
+      direction = female.followCursor(Lover.mouseX, Lover.mouseY)
+    if (female.colliding(Lover.male) && mouseOnScreen) {
       female.huggingLover = true
       female.undoMove(direction)
     } else {
