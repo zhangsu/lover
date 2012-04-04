@@ -4,8 +4,8 @@ Enemy.SPAWN_AREA_LENGTH = 100
 function Enemy(unitWidth, imagePath) {
   Character.call(this, 0, 0, unitWidth, imagePath)
   var spawnPosition = {}, entryEdge = randInt(0, 4),
-      canvasWidth = lover.canvas.width,
-      canvasHeight = lover.canvas.height
+      canvasWidth = Lover.canvas.width,
+      canvasHeight = Lover.canvas.height
   switch (entryEdge) {
   case 0:
     this.x = randInt(-Enemy.SPAWN_AREA_LENGTH, 0)

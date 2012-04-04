@@ -26,7 +26,7 @@ function Player(x, y, unitWidth, gender, imagePath) {
     this.breathLoseRate = 4
   } else if (gender == "female") {
     this.pace = 6
-    this.breathBarX = lover.canvas.width - Player.BREATH_BAR_WIDTH
+    this.breathBarX = Lover.canvas.width - Player.BREATH_BAR_WIDTH
                         - Player.BREATH_BAR_MARGIN
     this.breath = this.maxBreath = 1000
     this.breathRegenRate = 4
@@ -85,11 +85,11 @@ Player.prototype.followCursor = function (cursorX, cursorY) {
 }
 
 Player.prototype.drawBreathBar = function() {
-  var context = lover.context,
+  var context = Lover.context,
       radius = Player.BREATH_BAR_WIDTH / 2
   context.save()
   context.translate(this.breathBarX,
-                    (lover.canvas.height - Player.BREATH_BAR_HEIGHT) / 2)
+                    (Lover.canvas.height - Player.BREATH_BAR_HEIGHT) / 2)
   context.globalAlpha = 0.5
   context.lineWidth = 3
   context.beginPath()
@@ -112,7 +112,7 @@ Player.prototype.drawBreathBar = function() {
 }
 
 Player.prototype.animateHeart = function() {
-  var context = lover.context
+  var context = Lover.context
   context.save()
   this.heartScale += 0.01
   if (this.heartScale >= 2 * Player.HEART_SCALE)

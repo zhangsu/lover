@@ -75,7 +75,7 @@ Character.prototype = {
 
   moveDown : function () {
     var y = this.y + this.pace
-    if (y < lover.canvas.height)
+    if (y < Lover.canvas.height)
       this.y = y
     this.orientation = 0
   },
@@ -96,7 +96,7 @@ Character.prototype = {
 
   moveRight : function () {
     var x = this.x + this.pace
-    if (x < lover.canvas.width)
+    if (x < Lover.canvas.width)
       this.x = x
     this.orientation = 2
   },
@@ -133,7 +133,7 @@ Character.prototype = {
   },
 
   draw : function () {
-    var context = lover.context
+    var context = Lover.context
     var width = Math.round(this.spriteWidth * this.scale)
     var height = Math.round(this.spriteHeight * this.scale)
     context.globalAlpha = this.opacity
