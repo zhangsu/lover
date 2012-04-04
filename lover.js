@@ -137,10 +137,10 @@ Lover.context = Lover.canvas.getContext('2d')
       sprite.draw()
     })
     drawFullscreenMask()
-    if (male)
+    if (started) {
       male.drawBreathBar()
-    if (female)
       female.drawBreathBar()
+    }
     drawScore()
     if (!started)
       drawPrepareScreen()
