@@ -45,7 +45,7 @@ Lover.context = Lover.canvas.getContext('2d')
   maskContext.fillStyle = underWaterGradient
   maskContext.fillRect(0, 0, canvas.width, canvas.height)
   
-  gotoPrepareScreen()
+  gotoPromptScreen()
 
   window.setInterval(spawnEnemy, 7500)
 
@@ -64,7 +64,7 @@ Lover.context = Lover.canvas.getContext('2d')
     refresh()
   }, 50)
 
-  function gotoPrepareScreen() {
+  function gotoPromptScreen() {
     started = false
     var clickToContinue = window.addEventListener("click", cont)
     var pressToContinue = window.addEventListener("keypress", cont)
@@ -143,11 +143,11 @@ Lover.context = Lover.canvas.getContext('2d')
     }
     drawScore()
     if (!started)
-      drawPrepareScreen()
+      drawPromptScreen()
     context.drawImage(offscreenCanvas, 0, 0)
   }
 
-  function drawPrepareScreen() {
+  function drawPromptScreen() {
     var context = Lover.context
     context.fillStyle = "black"
     context.fillRect(0, 0, canvas.width, canvas.height)
@@ -197,7 +197,7 @@ Lover.context = Lover.canvas.getContext('2d')
       highscores.push(score)
       highscores.sort(function (a, b) { return b - a })
       localStorage.highscores = JSON.stringify(highscores.slice(0, 10))
-      gotoPrepareScreen()
+      gotoPromptScreen()
     }
   }
 
