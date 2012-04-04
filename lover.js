@@ -50,7 +50,7 @@ lover.context = lover.canvas.getContext('2d')
   
   gotoPrepareScreen()
 
-  window.setInterval(spawnEnemy, 5000)
+  window.setInterval(spawnEnemy, 7500)
 
   window.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
@@ -162,7 +162,7 @@ lover.context = lover.canvas.getContext('2d')
                         randInt(0, canvas.height), 16, "female", "img/female.png")
     enemies = []
     // Spawn enemies.
-    for (var i = 0; i < 20; ++i)
+    for (var i = 0; i < 10; ++i)
       spawnEnemy()
     started = true
     score = 0
