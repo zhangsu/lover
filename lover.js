@@ -19,8 +19,6 @@ lover.context = lover.canvas.getContext('2d')
       upKeyDown = false,
       cursorX, cursorY, hasFocus = true,
       cursorOnScreen,
-      sampleSpaceX, sampleSpaceY,
-      maleHuggingFemale, femaleHuggingMale,
       score = 0,
       started = false
   
